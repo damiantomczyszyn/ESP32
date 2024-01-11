@@ -5,12 +5,13 @@
 const char* ssid = "";
 const char* password = "";
 
-const size_t capacity = JSON_OBJECT_SIZE(10) + 3000;
+const size_t capacity = JSON_OBJECT_SIZE(2400) ;
+StaticJsonDocument<capacity> doc;
 
 WiFiClient client;
 HTTPClient http;
 
-DynamicJsonDocument doc(capacity);
+
 
 String httpGETRequest(const char* serverName);
 
@@ -43,7 +44,7 @@ void loop() {
       Serial.println(jsonResponse);
       
       deserializeJson(doc, jsonResponse);
-      Serial.println("Estimated memory usage: " + String(measureJson(doc)) + " bytes");
+      //Serial.println("Estimated memory usage: " + String(measureJson(doc)) + " bytes");
       if (doc.isNull()) {
         Serial.println("Parsing input failed!");
         return;
@@ -51,6 +52,7 @@ void loop() {
     
       Serial.println("JSON object = ");
       serializeJsonPretty(doc, Serial);
+      Serial.println("Estimated memory usage: " + String(measureJson(doc)) + " bytes");
     }
     else {
       Serial.println("WiFi Disconnected");
