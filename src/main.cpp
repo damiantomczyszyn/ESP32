@@ -1,20 +1,22 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <Arduino_JSON.h>
-//#include <ArduinoJson.h>
+#include <ArduinoJson.h>
+
 const char* ssid = "";
 const char* password = "";
 
+const size_t capacity = JSON_OBJECT_SIZE(10) + 3000;
+
+WiFiClient client;
+HTTPClient http;
+
+DynamicJsonDocument doc(capacity);
 
 String httpGETRequest(const char* serverName);
 
 
 unsigned long lastTime = 0;
-
-
 unsigned long timerDelay = 10000;
-
-String jsonBuffer;
 
 void setup() {
   Serial.begin(115200);
@@ -33,29 +35,22 @@ void setup() {
 }
 
 void loop() {
-
   if ((millis() - lastTime) > timerDelay) {
-
     if(WiFi.status()== WL_CONNECTED){
       String serverPath = "";
       
-      //jsonBuffer = httpGETRequest(serverPath.c_str());
-     // Serial.println(jsonBuffer);
-      JSONVar myObject = JSON.parse(httpGETRequest(serverPath.c_str()));
-  //54 KB parsing failed
-  //33.47 KB Parsing input failed!
-  //27.05 KB Parsing input failed!
-  //7 KB JSON achieved
-
-      if (JSON.typeof(myObject) == "undefined") {
+      String jsonResponse = httpGETRequest(serverPath.c_str());
+      Serial.println(jsonResponse);
+      
+      deserializeJson(doc, jsonResponse);
+      Serial.println("Estimated memory usage: " + String(measureJson(doc)) + " bytes");
+      if (doc.isNull()) {
         Serial.println("Parsing input failed!");
         return;
       }
     
       Serial.println("JSON object = ");
-      Serial.println(myObject);
-
-
+      serializeJsonPretty(doc, Serial);
     }
     else {
       Serial.println("WiFi Disconnected");
@@ -65,18 +60,15 @@ void loop() {
 }
 
 String httpGETRequest(const char* serverName) {
-  WiFiClient client;
-  HTTPClient http;
-    
   // Your Domain name with URL path or IP address with path
   http.begin(client, serverName);
   
-  // Send HTTP POST request
+  // Send HTTP GET request
   int httpResponseCode = http.GET();
   
   String payload = "{}"; 
   
-  if (httpResponseCode>0) {
+  if (httpResponseCode > 0) {
     Serial.print("HTTP Response code: ");
     Serial.println(httpResponseCode);
     payload = http.getString();
