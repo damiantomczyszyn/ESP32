@@ -5,8 +5,8 @@
 const char* ssid = "";
 const char* password = "";
 
-const size_t capacity = JSON_OBJECT_SIZE(2400) ;
-StaticJsonDocument<capacity> doc;
+const size_t capacity = JSON_OBJECT_SIZE(10) + 300;
+DynamicJsonDocument doc(capacity);
 
 WiFiClient client;
 HTTPClient http;
