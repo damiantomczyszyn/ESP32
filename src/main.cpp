@@ -3,8 +3,8 @@
 #include <ArduinoJson.h>
 
 
-const char* ssid = "dlink";
-const char* password = "tomczyszyn";
+const char* ssid = "";
+const char* password = "";
 
 
 WiFiServer server(80);
