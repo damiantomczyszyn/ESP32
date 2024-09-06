@@ -1,0 +1,31 @@
+Receiver:
+GND-> LED -> GPIO 15(vcc) 
+Button -> GPIO4(with GND, and with a 10kΩ pull-up resistor to VCC)
+
+NRF24L01 PA -> ESP32:
+
+    GND -> GND
+    VCC -> 3.3V 
+    CE -> GPIO 26
+    CSN -> GPIO 27
+    SCK -> GPIO 18
+    MOSI -> GPIO 23
+    MISO -> GPIO 19
+    IRQ -> 
+
+
+
+Transmitter:
+GND-> LED -> GPIO 15(vcc) 
+Button -> GPIO4(with GND, and with a 10kΩ pull-up resistor to VCC)
+
+NRF24L01 PA -> ESP32:
+
+    GND -> GND
+    VCC -> 3.3V (ze stabilizatorem w sockecie)
+    CE -> GPIO 26
+    CSN -> GPIO 27
+    SCK -> GPIO 18
+    MOSI -> GPIO 23
+    MISO -> GPIO 19
+    IRQ -> 
